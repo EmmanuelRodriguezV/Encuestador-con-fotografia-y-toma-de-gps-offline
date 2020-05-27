@@ -1,0 +1,5 @@
+<resources>
+    <string name="hintsize" ></string>
+    <string name="hint_norden"><font size="30">N° Orden</font></string>
+    <string name="sin_respuesta" >Porfavor escoge una respuesta para seguir</string>
+</resources>

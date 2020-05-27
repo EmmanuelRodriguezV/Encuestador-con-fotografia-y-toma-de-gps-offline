@@ -1,0 +1,17 @@
+crear la siguiente funcion llamada fn_registra_foto
+-----------------------------
+CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `fn_registra_foto`(encuesta_orden varchar(15),filename varchar(60)) RETURNS int(11)
+BEGIN
+SET SQL_SAFE_UPDATES=0;
+update  serv_encuesta
+set serv_encfoto = filename
+where sen_orden = encuesta_orden;
+RETURN 1;
+END
+
+
+--------------------
+
+en serv encuesta agregar el siguiente campo
+
+serv_encfoto varchar(60)

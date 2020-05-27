@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/fragmentquest"
+        android:name="cfe.cfeencuesta.Fragments.QuestrionFragment"
+        android:layout_width="321dp"
+        android:layout_height="541dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.347"
+        tools:layout="@layout/fragmentquestionlayout"></fragment>
+
+    <Button
+        android:layout_width="213dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="573dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="#fafafa"
+        android:text="Siguiente"
+        android:background="@drawable/backgroundbtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragmentquest">
+
+    </Button>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,576 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Cfeencuesta extends CI_Controller {
+
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/user_guide/general/urls.html
+	 */
+	public function index()
+	{
+		$this->load->helper('url');
+        echo "Ruta de prueba funcionando";
+		//$this->load->view('index');
+	}
+
+    public function sinc_encuestas()
+    {
+        //$this->load->helper('url');
+        echo "Sincronizador de encuestas";
+        $this->load->database('default');
+        $this->load->model('mcfeencuesta');
+
+        $encuestas = $this->mcfeencuesta->sinc_encuestas();
+
+        $respuesta = new stdClass();
+
+        if(count($encuestas))
+        {
+
+
+            $respuesta->estatus = 1;
+            $respuesta->mensaje = 'Encuestas habilitadas';
+            $respuesta->datos = $encuestas;
+
+        }
+        else
+        {
+            $respuesta->estatus = 0;
+            $respuesta->mensaje = 'Error al recuperar las encuestas';
+            $respuesta->datos = '';             
+        }
+
+        echo json_encode($respuesta);
+        //$this->load->view('index');
+    }
+
+    public function alm_res_encuesta()
+    {
+        //$this->load->helper('url');
+        echo "Almacenador de los resultados de la encuesta";
+        $this->load->database('default');
+        $this->load->model('mcfeencuesta');
+
+        $this->request = json_decode(file_get_contents('php://input'));
+
+        $confirma = $this->mcfeencuesta->alm_res_encuesta($this->request);
+
+        $respuesta = new stdClass();
+
+        if($confirma)
+        {
+
+
+            $respuesta->estatus = 1;
+            $respuesta->mensaje = 'Encuesta almacenada!';
+            $respuesta->datos = $encuestas;
+
+        }
+        else
+        {
+            $respuesta->estatus = 0;
+            $respuesta->mensaje = 'Error al guardar la encuesta';
+            $respuesta->datos = '';             
+        }
+
+        echo json_encode($respuesta);
+
+
+        //$this->load->view('index');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+	public function capobra()
+	{
+
+		$this->load->helper('url');
+		$this->request = json_decode(file_get_contents('php://input'));
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $agente = $_SERVER['HTTP_USER_AGENT'];
+
+		$this->load->database('default');
+		$this->load->model('mfn');
+
+        $this->load->library('session');
+
+        if($this->session->userdata('sesion'))
+        {
+
+            
+            $obra = $this->mfn->capobra($this->request->obra, $this->request->usu_id, $ip, $agente);
+
+            $respuesta = new stdClass();
+
+            if($obra)
+            {
+
+
+                $respuesta->estatus = 1;
+                $respuesta->mensaje = 'Obra almacenada correctamente';
+                $respuesta->datos = $obra;
+
+            }
+            else
+            {
+                $respuesta->estatus = 0;
+                $respuesta->mensaje = 'Error al tratar de almacenar la obra, conuniquese con el área de soporte!!';
+                $respuesta->datos = '';             
+            }
+
+
+        }
+        else
+        {
+            $respuesta->estatus = 0;
+            $respuesta->mensaje = 'No existía sesión activa para el usuario';
+            $respuesta->datos = '';
+        } 
+
+
+
+
+		echo json_encode($respuesta);
+		//exit();
+
+
+
+		//$this->load->view('index');
+	}
+
+
+
+
+
+    public function obtdivs()
+    {
+
+        $this->load->helper('url');
+        $this->request = json_decode(file_get_contents('php://input'));
+
+        $this->load->database('default');
+        $this->load->model('mcat');
+            
+        $this->load->library('session');
+
+        if($this->session->userdata('sesion'))
+        {
+
+            $divs = $this->mcat->obtdivs();
+
+            $respuesta = new stdClass();
+
+            if($divs)
+            {
+                $respuesta->estatus = 1;
+                $respuesta->mensaje = '';
+                $respuesta->datos = $divs;
+
+            }
+            else
+            {
+                $respuesta->estatus = 0;
+                $respuesta->mensaje = 'No se encontraron Divisiones en la BD...';
+                $respuesta->datos = '';             
+            }
+        }
+        else
+        {
+            $respuesta->estatus = 0;
+            $respuesta->mensaje = 'No existía sesión activa para el usuario';
+            $respuesta->datos = '';
+        }
+
+        echo json_encode($respuesta);
+        //exit();
+
+
+
+        //$this->load->view('index');
+    }
+
+    public function obtzonas($div_id)
+    {
+
+        $this->load->helper('url');
+        //$this->request = json_decode(file_get_contents('php://input'));
+
+        $this->load->database('default');
+        $this->load->model('mcat');
+            
+        $this->load->library('session');
+
+        if($this->session->userdata('sesion'))
+        {
+
+            $zonas = $this->mcat->obtzonas($div_id);
+
+            $respuesta = new stdClass();
+
+            if($zonas)
+            {
+                $respuesta->estatus = 1;
+                $respuesta->mensaje = '';
+                $respuesta->datos = $zonas;
+
+            }
+            else
+            {
+                $respuesta->estatus = 0;
+                $respuesta->mensaje = 'No se encontraron Zonas para la División Seleccionada en la BD...';
+                $respuesta->datos = '';             
+            }
+        }
+        else
+        {
+            $respuesta->estatus = 0;
+            $respuesta->mensaje = 'No existía sesión activa para el usuario';
+            $respuesta->datos = '';
+        }
+
+        echo json_encode($respuesta);
+        //exit();
+
+
+
+        //$this->load->view('index');
+    }
+
+    public function envia_obra_en()
+    {
+
+        $this->load->helper('url');
+        $this->request = json_decode(file_get_contents('php://input'));
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $agente = $_SERVER['HTTP_USER_AGENT'];
+
+        $this->load->database('default');
+        $this->load->model('mfn');
+
+        $this->load->library('session');
+
+        if($this->session->userdata('sesion'))
+        {
+
+            
+            $obra = $this->mfn->envia_obra_en($this->request->ob_id, $this->request->usu_id, $ip, $agente);
+
+            $respuesta = new stdClass();
+
+            if($obra)
+            {
+
+
+                $respuesta->estatus = 1;
+                $respuesta->mensaje = 'Obra almacenada correctamente';
+                $respuesta->datos = $obra;
+
+            }
+            else
+            {
+                $respuesta->estatus = 0;
+                $respuesta->mensaje = 'Error al tratar de almacenar la obra, conuniquese con el área de soporte!!';
+                $respuesta->datos = '';             
+            }
+
+
+        }
+        else
+        {
+            $respuesta->estatus = 0;
+            $respuesta->mensaje = 'No existía sesión activa para el usuario';
+            $respuesta->datos = '';
+        } 
+
+
+
+
+        echo json_encode($respuesta);
+        //exit();
+
+
+
+        //$this->load->view('index');
+    }
+
+    public function salir()
+    {
+
+        $this->load->helper('url');
+        $this->request = json_decode(file_get_contents('php://input'));
+
+        //$this->load->database('default');
+        //$this->load->model('mlogin');
+            
+
+        //$usuario = $this->mlogin->valida($this->request);
+
+
+        $respuesta = new stdClass();
+
+        $this->load->library('session');
+
+        if($this->session->userdata('sesion'))
+        {
+
+            
+            $this->session->unset_userdata('sesion');
+            $this->session->sess_destroy();
+
+
+
+            $respuesta->estatus = 1;
+            $respuesta->mensaje = 'Sesion Finalizada';
+            $respuesta->datos = '';
+
+        }
+        else
+        {
+            $respuesta->estatus = 0;
+            $respuesta->mensaje = 'No existía sesión activa para el usuario';
+            $respuesta->datos = '';
+        }
+
+
+        echo json_encode($respuesta);
+        //exit();
+
+
+
+        //$this->load->view('index');
+    }
+
+
+
+	public function altatrab()
+	{
+
+		$this->load->helper('url');
+		$this->request = json_decode(file_get_contents('php://input'));
+
+		$this->load->database('default');
+		$this->load->model('mlogin');
+    		
+		$respuesta = new stdClass();
+
+    		if($this->mlogin->altatrab($this->request))
+    		{
+    			$respuesta->estatus = 1;
+    			$respuesta->mensaje = "Alta Exitosa";
+    		}
+    		else
+    		{
+    			$respuesta->estatus = 0;
+    			$respuesta->mensaje = "Error al dar de alta";    			
+    		}
+
+		echo json_encode($respuesta);
+		//exit();
+		//$this->load->view('index');
+	}
+
+	public function bajatrab()
+	{
+
+		$this->load->helper('url');
+		$this->request = json_decode(file_get_contents('php://input'));
+
+		$this->load->database('default');
+		$this->load->model('mlogin');
+    		
+		$respuesta = new stdClass();
+
+    		if($this->mlogin->bajatrab($this->request))
+    		{
+    			$respuesta->estatus = 1;
+    			$respuesta->mensaje = "Baja Exitosa";
+    		}
+    		else
+    		{
+    			$respuesta->estatus = 0;
+    			$respuesta->mensaje = "Error al dar de alta";    			
+    		}
+
+		echo json_encode($respuesta);
+		//exit();
+		//$this->load->view('index');
+	}
+
+	public function listtrab()
+	{
+
+		$this->load->helper('url');
+
+		$this->load->database('default');
+		$this->load->model('mlogin');
+    		
+
+    		$trabajadores = $this->mlogin->listtrab();
+
+    		$respuesta = new stdClass();
+
+    		if($trabajadores)
+    		{
+    			$respuesta->estatus = 1;
+    			$respuesta->mensaje = '';
+    			$respuesta->datos = $trabajadores;
+
+    		}
+    		else
+    		{
+    			$respuesta->estatus = 0;
+    			$respuesta->mensaje = 'No existen trabajadores en la BD';
+    			$respuesta->datos = '';    			
+    		}
+
+		echo json_encode($respuesta);
+		//exit();
+
+
+
+		//$this->load->view('index');
+	}
+
+	public function traetrab()
+	{
+
+		$this->load->helper('url');
+		$this->request = json_decode(file_get_contents('php://input'));
+
+		$this->load->database('default');
+		$this->load->model('mlogin');
+    		
+
+    		$trabajador = $this->mlogin->traetrab($this->request);
+
+    		$respuesta = new stdClass();
+
+    		if($trabajador)
+    		{
+    			$respuesta->estatus = 1;
+    			$respuesta->mensaje = '';
+    			$respuesta->datos = $trabajador;
+
+    		}
+    		else
+    		{
+    			$respuesta->estatus = 0;
+    			$respuesta->mensaje = 'El trabajador no existe';
+    			$respuesta->datos = '';    			
+    		}
+
+		echo json_encode($respuesta);
+		//exit();
+
+
+
+		//$this->load->view('index');
+	}
+
+	public function modiftrab()
+	{
+
+		$this->load->helper('url');
+		$this->request = json_decode(file_get_contents('php://input'));
+
+		$this->load->database('default');
+		$this->load->model('mlogin');
+    		
+		$respuesta = new stdClass();
+
+    		if($this->mlogin->modiftrab($this->request))
+    		{
+    			$respuesta->estatus = 1;
+    			$respuesta->mensaje = "Modificación Exitosa";
+    		}
+    		else
+    		{
+    			$respuesta->estatus = 0;
+    			$respuesta->mensaje = "Error al Modificar";    			
+    		}
+
+		echo json_encode($respuesta);
+		//exit();
+		//$this->load->view('index');
+	}
+
+	public function catzonas()
+	{
+
+		$this->load->helper('url');
+
+		$this->load->database('default');
+		$this->load->model('mlogin');
+    		
+
+    		$zonas = $this->mlogin->catzonas();
+    		
+
+
+    		$respuesta = new stdClass();
+
+    		if($zonas)
+    		{
+    			$respuesta->estatus = 1;
+    			$respuesta->mensaje = '';
+    			$respuesta->datos = $zonas;
+
+    		}
+    		else
+    		{
+    			$respuesta->estatus = 0;
+    			$respuesta->mensaje = 'No existen Zonas';
+    			$respuesta->datos = '';    			
+    		}
+
+		echo json_encode($respuesta);
+		//exit();
+
+
+
+		//$this->load->view('index');
+	}*/
+
+}
